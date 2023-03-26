@@ -10,4 +10,25 @@ bsObject = BeautifulSoup(html,"html.parser")
 for link in bsObject.find_all('a'):
     print(link.text.strip(),link.get('href'))
 
-#참고 https://db-log.tistory.com/entry/33-%ED%81%AC%EB%A1%A4%EB%A7%81%ED%95%9C-%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%A5%BC-json-%ED%8C%8C%EC%9D%BC-%EB%A7%8C%EB%93%A4%EA%B8%B0
+def toJson(mnet_dict):
+    with open('mnet_chart.json', 'w', encoding='utf-8') as file :
+        json.dump(mnet_dict, file, ensure_ascii=False, indent='\t')
+
+from collections import OrderedDict
+
+LENGTH = min(len(img), len(brand), len(name), len(ref_no), len(price_origin), len(price_final))
+    products = OrderedDict()
+
+    print("processing data to json")
+    # json 형태 저장하는걸 바꾸려면 여기수정
+    for idx in range(0, LENGTH):
+        products['no_' + str(idx + 1)] = {
+            'img': img[idx].get_attribute("data-original"),
+            'brand': brand[idx].text,
+            'name': name[idx].text,
+            'ref_no': ref_no[idx].text,
+            'price': {
+                'sale': price_origin[idx].text,
+                'won': price_final[idx].text
+            }
+        }  
