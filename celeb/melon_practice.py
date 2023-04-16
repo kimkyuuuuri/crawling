@@ -15,11 +15,16 @@ sheet = wb.active
 period = 1
 month = 1
 result_df = pd.DataFrame()
-index=1
+index=0
 index_backup=1
+celeb_category_id=10
+artist_name=''
+member_artist_name=''
+name=''
 
-while period < 2 and month<3:
+while period < 2 and month<2:
     try:
+        celeb_category_id=10
         context = ssl._create_unverified_context()
         driver = wd.Chrome('/Users/kimkyuri/Documents/학교공부/4-1/sluv/crawling/celeb/chromedriver_mac_arm64/chromedriver')
         driver.maximize_window()
@@ -60,7 +65,7 @@ while period < 2 and month<3:
         
         driver.find_element_by_xpath('//*[@id="d_chart_search"]/div/div/div[5]/div[1]/ul/li[3]/span/label').click()
         time.sleep(1)
-        print(1)
+        
     
         
         # 검색버튼 클릭
@@ -88,10 +93,36 @@ while period < 2 and month<3:
                 req2 = Request(artist_link, headers={'User-Agent': 'Mozilla/5.0'})
                 url = urlopen(req2,context=context).read()
                 _artist_page = BeautifulSoup(url, 'html.parser')
+
+                #celeb_category_id default=10 (솔로)
+                celeb_category_id=10
                 
                 artist_info = _artist_page.findAll("div", "wrap_atist_info")
                 name = _artist_page.findAll("p","title_atist")
                 member_name = _artist_page.findAll("p","wrap_atistname")
+                
+                artist_detail_link="https://m2.melon.com/artist/detail/info.htm?artistId="+artist_id
+                req = Request(artist_detail_link, headers={'User-Agent': 'Mozilla/5.0'})
+                url = urlopen(req,context=context).read()
+                _artist_detail_page = BeautifulSoup(url, 'html.parser')
+                        
+                artist_detail_info = _artist_detail_page.findAll("div","item-detail")
+                        
+                for i3,artist in enumerate(artist_detail_info):
+                            
+                    artist_detail_info2 = artist.findAll("div","txt-g")
+                            
+                    for i4,artist4 in enumerate(artist_detail_info2):
+                        if '/' in artist4.text and '그룹' in artist4.text and '여성' in artist4.text and '\n' in artist4.text:
+                            celeb_category_id=7
+                            break
+                        elif '/' in artist4.text and '그룹' in artist4.text and '남성' in artist4.text and '\n' in artist4.text:
+                             celeb_category_id=8
+                             break
+                        elif '/' in artist4.text and '그룹' in artist4.text and '혼성' in artist4.text and '\n' in artist4.text:
+                             celeb_category_id=9
+                             break
+                
                 
                 
                 for i3,artist in enumerate(artist_info):
@@ -101,32 +132,53 @@ while period < 2 and month<3:
                         
                         for i5,artist5 in enumerate(artist4):
                             if i5%2==1:
-                                print(artist5.text)
-                                sheet.append([index,0,artist5.text])
-                                index_backup=index
-                                index+=1
+                                # 솔로일떄와 구분 (parend_id로 들어가야함.)
                                 
+                                
+                                name=artist5.text
+                                   
+                                index+=1
+                                if (celeb_category_id!=10):
+                                    index_backup=index
+                               
+                                sheet.append([index,"",celeb_category_id,name])
+                   
+                                
+                    
+
                             
                         
                     for j,member in enumerate(member_name):
-                        test=member.findAll("a","atistname")
-                        for i5,artist5 in enumerate(test):
-                            
-                           
-                            sheet.append([index,index_backup,artist5.text])
+                        member_name=member.findAll("a","atistname")
+                       
+                        
+                        
+                               
+                        
+                        for i5,artist5 in enumerate(member_name):
+                            artist_name=artist5.text
+                            #sheet.append([index,index_backup,artist5.text])
                             index+=1
-                          
+                            #print('\n')
+                            #print("group")
+                            #print(index)
+                            #print(index_backup)
+                            #print(celeb_category_id)
+                            #print(artist_name)
                         
 
-            
+                            sheet.append([index,index_backup,celeb_category_id,artist_name])
+                            
                     
-                
-            #print(artist_id)
-                                    
-            
+                        #case solop
+                        #print('\n')
+                        #print("solo")
+                        #print(index)
+                        #print(celeb_category_id)
+                        #print(artist_name)
+                   
+                        
         
-              
-                    
      
       
         
