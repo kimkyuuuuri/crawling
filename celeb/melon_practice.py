@@ -90,6 +90,8 @@ while period < 2 and month<2:
                 artist_id=(test2['href'].split("'")[1].split("'")[0])
                 artist_link="https://www.melon.com/artist/timeline.htm?artistId="+artist_id
 
+                
+
                 req2 = Request(artist_link, headers={'User-Agent': 'Mozilla/5.0'})
                 url = urlopen(req2,context=context).read()
                 _artist_page = BeautifulSoup(url, 'html.parser')
@@ -105,6 +107,8 @@ while period < 2 and month<2:
                 req = Request(artist_detail_link, headers={'User-Agent': 'Mozilla/5.0'})
                 url = urlopen(req,context=context).read()
                 _artist_detail_page = BeautifulSoup(url, 'html.parser')
+
+                
                         
                 artist_detail_info = _artist_detail_page.findAll("div","item-detail")
                         
@@ -141,21 +145,16 @@ while period < 2 and month<2:
                                 if (celeb_category_id!=10):
                                     index_backup=index
                                
-                                sheet.append([index,"",celeb_category_id,name])
-                   
-                                
-                    
-
-                            
+                                sheet.append([index,"",celeb_category_id,name,artist_id])
+                             
                         
                     for j,member in enumerate(member_name):
                         member_name=member.findAll("a","atistname")
                        
-                        
-                        
-                               
-                        
                         for i5,artist5 in enumerate(member_name):
+                            #artist_id2=(artist5['href'].split("'")[1].split("'")[0])
+                            artist_id2=artist5['href'].split("(")[1].split(")")[0]
+                          
                             artist_name=artist5.text
                             #sheet.append([index,index_backup,artist5.text])
                             index+=1
@@ -167,7 +166,8 @@ while period < 2 and month<2:
                             #print(artist_name)
                         
 
-                            sheet.append([index,index_backup,celeb_category_id,artist_name])
+                            sheet.append([index,index_backup,celeb_category_id,artist_name,artist_id2])
+                           
                             
                     
                         #case solop
