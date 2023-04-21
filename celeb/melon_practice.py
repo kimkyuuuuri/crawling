@@ -13,17 +13,30 @@ wb = openpyxl.Workbook()
 sheet = wb.active
 
 period = 1
+year=1
 month = 1
-result_df = pd.DataFrame()
 index=0
 index_backup=1
 celeb_category_id=10
 artist_name=''
 member_artist_name=''
 name=''
+idList=[]
 
-while period < 2 and month<2:
+while period < 3 and period <3: 
+    
+   
     try:
+        if period ==1 and year==1 and month==4:
+            year=2
+            month=1
+
+
+        #### test!!
+        if period ==1 and year==1 and month==2:
+            break
+        
+        
         celeb_category_id=10
         context = ssl._create_unverified_context()
         driver = wd.Chrome('/Users/kimkyuri/Documents/학교공부/4-1/sluv/crawling/celeb/chromedriver_mac_arm64/chromedriver')
@@ -51,7 +64,8 @@ while period < 2 and month<2:
 
         # 연도선택
         
-        driver.find_element_by_xpath('//*[@id="d_chart_search"]/div/div/div[2]/div[1]/ul/li[1]/span/label').click()
+        #driver.find_element_by_xpath('//*[@id="d_chart_search"]/div/div/div[2]/div[1]/ul/li[1]/span/label').click()
+        driver.find_element_by_xpath('//*[@id="d_chart_search"]/div/div/div[2]/div[1]/ul/li[{}]/span/label'.format(year)).click()
         time.sleep(1)
         
 
@@ -62,6 +76,7 @@ while period < 2 and month<2:
         
 
         # 장르선택 종합 클릭
+        ## ----------------수정 필요 !! ------------------------------
         
         driver.find_element_by_xpath('//*[@id="d_chart_search"]/div/div/div[5]/div[1]/ul/li[3]/span/label').click()
         time.sleep(1)
@@ -71,10 +86,28 @@ while period < 2 and month<2:
         # 검색버튼 클릭
         driver.find_element_by_xpath('//*[@id="d_srch_form"]/div[2]/button/span/span').click()
         time.sleep(1)
-        month+=1
-        if month >12:
-            period+=1
+        #month+=1
+        #if month >12:
+         #   period+=1
+          #  month=1
+
+        month+=1                  
+        if month == 13:
+            year+=1
             month=1
+        if year == 11:
+            period+=1
+            year=1
+            
+        print("period")
+        print(period)
+
+        print("year")
+        print(year)
+
+        print("month")
+        print(month)
+        print(len(idList))
         
         # html 정보 가져오기
         html = driver.page_source
@@ -88,6 +121,13 @@ while period < 2 and month<2:
             for j,test2 in enumerate(test):
             
                 artist_id=(test2['href'].split("'")[1].split("'")[0])
+                
+                if artist_id in idList:
+                    continue
+
+                else:
+                    idList.append(artist_id)
+                   
                 artist_link="https://www.melon.com/artist/timeline.htm?artistId="+artist_id
 
                 
@@ -137,55 +177,49 @@ while period < 2 and month<2:
                         for i5,artist5 in enumerate(artist4):
                             if i5%2==1:
                                 # 솔로일떄와 구분 (parend_id로 들어가야함.)
-                                
-                                
+       
                                 name=artist5.text
                                    
                                 index+=1
                                 if (celeb_category_id!=10):
                                     index_backup=index
+
                                
                                 sheet.append([index,"",celeb_category_id,name,artist_id])
+                                
                              
                         
                     for j,member in enumerate(member_name):
                         member_name=member.findAll("a","atistname")
                        
                         for i5,artist5 in enumerate(member_name):
-                            #artist_id2=(artist5['href'].split("'")[1].split("'")[0])
-                            artist_id2=artist5['href'].split("(")[1].split(")")[0]
-                          
-                            artist_name=artist5.text
-                            #sheet.append([index,index_backup,artist5.text])
-                            index+=1
-                            #print('\n')
-                            #print("group")
-                            #print(index)
-                            #print(index_backup)
-                            #print(celeb_category_id)
-                            #print(artist_name)
-                        
-
-                            sheet.append([index,index_backup,celeb_category_id,artist_name,artist_id2])
-                           
                             
-                    
-                        #case solop
-                        #print('\n')
-                        #print("solo")
-                        #print(index)
-                        #print(celeb_category_id)
-                        #print(artist_name)
-                   
+                            artist_id2=artist5['href'].split("(")[1].split(")")[0]
+                            if artist_id2 in idList:
+                                continue
+                            else:
+                                idList.append(artist_id2)
+                                artist_name=artist5.text
+                                index+=1
                         
+                    
+
+                                sheet.append([index,index_backup,celeb_category_id,artist_name,artist_id2])
+                                
         
+    
+            
      
       
         
        
     except:
+        print("오류발생")
         print(period)
         break
+                   
+                        
+    
 
 wb.save("melon_singer.xlsx")
 
