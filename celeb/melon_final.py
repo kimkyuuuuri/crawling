@@ -25,7 +25,6 @@ idList=[]
 
 while period < 3 and period <3: 
     
-   
     try:
         if period ==1 and year==1 and month==4:
             year=2
@@ -34,19 +33,13 @@ while period < 3 and period <3:
             period=2
             year=1
 
-
-        #### test!!
-       # if period ==1 and year==1 and month==2:
-        #    break
-        
-        
         celeb_category_id=10
         context = ssl._create_unverified_context()
         driver = wd.Chrome('/Users/kimkyuri/Documents/학교공부/4-1/sluv/crawling/celeb/chromedriver_mac_arm64/chromedriver')
         driver.maximize_window()
 
         # 드라이버가 해당 url 접속
-        url = 'https://www.melon.com/chart/index.htm' # 멜론차트 페이지
+        url = 'https://www.melon.com/chart/index.htm' 
         driver.get(url)                                                                     
         time.sleep(0.5)
        
@@ -66,7 +59,6 @@ while period < 3 and period <3:
         
 
         # 연도선택
-        
         #driver.find_element_by_xpath('//*[@id="d_chart_search"]/div/div/div[2]/div[1]/ul/li[1]/span/label').click()
         driver.find_element_by_xpath('//*[@id="d_chart_search"]/div/div/div[2]/div[1]/ul/li[{}]/span/label'.format(year)).click()
         time.sleep(1)
@@ -79,8 +71,6 @@ while period < 3 and period <3:
         
 
         # 장르선택 종합 클릭
-        ## ----------------수정 필요 !! ------------------------------
-
         if year==1 and period==1:
             driver.find_element_by_xpath('//*[@id="d_chart_search"]/div/div/div[5]/div[1]/ul/li[3]/span/label').click()
         elif year ==2 and month>5 and period==1:
@@ -93,14 +83,9 @@ while period < 3 and period <3:
         
     
         
-        # 검색버튼 클릭
+        # 검색 버튼 클릭
         driver.find_element_by_xpath('//*[@id="d_srch_form"]/div[2]/button/span/span').click()
         time.sleep(1)
-        #month+=1
-        #if month >12:
-         #   period+=1
-          #  month=1
-
         month+=1                  
         if month == 13:
             year+=1
@@ -118,36 +103,29 @@ while period < 3 and period <3:
 
         print("month")
         print(month)
-        print(len(idList))
         
         # html 정보 가져오기
         html = driver.page_source
         soup = BeautifulSoup(html, 'html.parser')
-       
         upper_category =  soup.findAll('span','checkEllipsis')
-        #upper_category =  soup.findAll('div','fc_mgray')
         
         for i,title in enumerate(upper_category):
             test =  title.findAll('a','fc_mgray')
             for j,test2 in enumerate(test):
-            
                 artist_id=(test2['href'].split("'")[1].split("'")[0])
-                
                 if artist_id in idList:
                     continue
 
                 else:
                     idList.append(artist_id)
-                   
                 artist_link="https://www.melon.com/artist/timeline.htm?artistId="+artist_id
 
                 
-
                 req2 = Request(artist_link, headers={'User-Agent': 'Mozilla/5.0'})
                 url = urlopen(req2,context=context).read()
                 _artist_page = BeautifulSoup(url, 'html.parser')
 
-                #celeb_category_id default=10 (솔로)
+                #솔로일 경우 category_id = 10
                 celeb_category_id=10
                 
                 artist_info = _artist_page.findAll("div", "wrap_atist_info")
@@ -158,82 +136,69 @@ while period < 3 and period <3:
                 req = Request(artist_detail_link, headers={'User-Agent': 'Mozilla/5.0'})
                 url = urlopen(req,context=context).read()
                 _artist_detail_page = BeautifulSoup(url, 'html.parser')
+                artist_detail_info = _artist_detail_page.findAll("div","item-detail")
 
                 
-                        
-                artist_detail_info = _artist_detail_page.findAll("div","item-detail")
-                        
-                for i3,artist in enumerate(artist_detail_info):
-                            
-                    artist_detail_info2 = artist.findAll("div","txt-g")
-                            
-                    for i4,artist4 in enumerate(artist_detail_info2):
-                        if '/' in artist4.text and '그룹' in artist4.text and '여성' in artist4.text and '\n' in artist4.text:
+                                  
+                for i2,artist2 in enumerate(artist_detail_info):
+                    artist_detail_info2 = artist2.findAll("div","txt-g")
+                    
+                    # 여성, 남성, 혼성 그룹인 케이스를 나눠 category_id 저장 
+                    for i3,artist3 in enumerate(artist_detail_info2):
+                        if '/' in artist3.text and '그룹' in artist3.text and '여성' in artist3.text and '\n' in artist3.text:
                             celeb_category_id=7
                             break
-                        elif '/' in artist4.text and '그룹' in artist4.text and '남성' in artist4.text and '\n' in artist4.text:
+                        elif '/' in artist3.text and '그룹' in artist3.text and '남성' in artist3.text and '\n' in artist3.text:
                              celeb_category_id=8
                              break
-                        elif '/' in artist4.text and '그룹' in artist4.text and '혼성' in artist4.text and '\n' in artist4.text:
+                        elif '/' in artist3.text and '그룹' in artist3.text and '혼성' in artist3.text and '\n' in artist3.text:
                              celeb_category_id=9
                              break
                 
                 
                 
-                for i3,artist in enumerate(artist_info):
-                    name = artist.findAll("p","title_atist")
-                    member_name = artist.findAll("div","wrap_atistname")
+                for i3,artist3 in enumerate(artist_info):
+                    name = artist3.findAll("p","title_atist")
+                    member_name = artist3.findAll("div","wrap_atistname")
                     for i4,artist4 in enumerate(name):
                         
                         for i5,artist5 in enumerate(artist4):
                             if i5%2==1:
-                                # 솔로일떄와 구분 (parend_id로 들어가야함.)
-       
-                                name=artist5.text
-                                   
+                                name=artist4.text
                                 index+=1
+
+                                # 그룹일 때는 index backup 해두기 (멤버의 데이터를 넣을 때 parent_id로 사용하기 위함)
                                 if (celeb_category_id!=10):
                                     index_backup=index
 
-                               
+                                # 그룹 or 솔로 데이터 저장 
                                 sheet.append([index,"",celeb_category_id,name,artist_id])
                                 
                              
-                        
-                    for j,member in enumerate(member_name):
-                        member_name=member.findAll("a","atistname")
+                    # 그룹의 멤버 저장 
+                    for k,member in enumerate(member_name):
+                        member_name2=member.findAll("a","atistname")
                        
-                        for i5,artist5 in enumerate(member_name):
+                        for i6,artist6 in enumerate(member_name2):
                             
-                            artist_id2=artist5['href'].split("(")[1].split(")")[0]
+                            artist_id2=artist6['href'].split("(")[1].split(")")[0]
                             if artist_id2 in idList:
                                 continue
                             else:
                                 idList.append(artist_id2)
-                                artist_name=artist5.text
+                                artist_name=artist6.text
                                 index+=1
-                        
-                    
+               
 
                                 sheet.append([index,index_backup,celeb_category_id,artist_name,artist_id2])
                                 
-        
     
-            
-     
-      
-        
        
-    except:
-        print("오류발생")
-        print(period)
+    except Exception as e:
+        print("오류 발생")
+        print(e)
         break
                    
-                        
-    
-
+                       
 wb.save("melon_singer.xlsx")
 
-#wb.save("musinsa_brand_new_add.xlsx")
-
-#wb쓰면 출력되는데 안하면 안됨! 
