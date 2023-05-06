@@ -23,7 +23,7 @@ member_artist_name=''
 name=''
 idList=[]
 
-while period < 3 and period <3: 
+while period < 3 and year <3: 
     
     try:
         if period ==1 and year==1 and month==4:
@@ -110,9 +110,9 @@ while period < 3 and period <3:
         upper_category =  soup.findAll('span','checkEllipsis')
         
         for i,title in enumerate(upper_category):
-            test =  title.findAll('a','fc_mgray')
-            for j,test2 in enumerate(test):
-                artist_id=(test2['href'].split("'")[1].split("'")[0])
+            data =  title.findAll('a','fc_mgray')
+            for j,data2 in enumerate(data):
+                artist_id=(data2['href'].split("'")[1].split("'")[0])
                 if artist_id in idList:
                     continue
 
