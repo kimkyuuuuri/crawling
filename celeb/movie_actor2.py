@@ -69,61 +69,14 @@ while period < 3 and year <3:
             table_html = table.get_attribute('outerHTML')
             soup = BeautifulSoup(table_html, 'html.parser')
             actor_data = soup.find_all('a')
-            print(actor_data)
-
+    
             
 
             for j, actor in enumerate(actor_data):
                
                 code=actor['onclick'].split("'people','")[1].split("'")[0]
-                print(code)
-                print("person code!!!!")
-                
-                function = "mstView('people','" + code + "')"
-                driver.execute_script (function)
-                time.sleep(1)
-
-                #이름 파싱
-                print(index)
-                #//*[@id="ui-id-15"]/div[1]/div[1]
-                
-                
-                #name = driver.find_element_by_xpath('//*[@id="ui-id-'+str(index)+'"]/div[1]/div[1]')
-                name = driver.find_element_by_xpath('/html/body/div[4]')
-                name_html = name.get_attribute('outerHTML')
-                print(name_html)
-                
-                soup = BeautifulSoup(name_html, 'html.parser')
-                korName = soup.find_all('strong','tit')[0].text
-                print(korName)
-                
-                hd_layer = soup.find_all('div','hd_layer')
-                #soup2 = BeautifulSoup(hd_layer, 'html.parser')
-                #print(soup2)
-
-              #  engName = soup2.find_all(attrs={"style": "display:inline-block;"})
-               # print(engName)
-
+                print(actor.text.split("(")[0])
                
-                
-                print('한글이름' )
-               
-                for k, name in enumerate(hd_layer):
-                    
-                    print(k)
-                    print(name)
-                    engName = name.find_all('div',attrs={"style":"display: inline-block;"})
-                    
-                    print(engName)
-                    print('영어이름')
-                
-                time.sleep(1)
-
-            #driver.close()
-
-            
-  
-
        
     except Exception as e:
         print("오류 발생")
