@@ -34,7 +34,7 @@ time.sleep(0.5)
      
 # 조회 
 driver.find_element_by_xpath('//*[@id="searchForm"]/div/div[4]/button').click()
-time.sleep(1)
+time.sleep(0.5)
 
 
 try:
@@ -47,7 +47,7 @@ try:
         code=data2['onclick'].split("'movie','")[1].split("'")[0]
         function = "mstView('movie','" + code + "')"
         driver.execute_script (function)
-        time.sleep(1)
+        time.sleep(0.5)
 
         html = driver.page_source
         soup = BeautifulSoup(html, 'html.parser')
