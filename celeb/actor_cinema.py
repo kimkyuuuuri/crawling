@@ -26,7 +26,7 @@ actor_url = 'http://www.cine21.com/rank/person/content'
 
 formdata_dict = dict()
 formdata_dict['section'] = 'actor'
-formdata_dict['period_start'] = '2019-4'
+formdata_dict['period_start'] = '2012-4'
 formdata_dict['gender'] = 'all'
 
 
@@ -93,8 +93,8 @@ for page in count(1):
        
          
             print(actor_name)
-            if pk==1000:
-                wb.save("actor_cinema_2019.xlsx")
+            if pk==600:
+                wb.save("actor_cinema_2012.xlsx")
                 
             sheet.append([pk,celeb_category_id, eng_names[0],actor_name])
             
@@ -107,5 +107,5 @@ for page in count(1):
        
                  
                                 
-wb.save("actor_cinema_test.xlsx")
+wb.save("actor_cinema_2021.xlsx")
         
