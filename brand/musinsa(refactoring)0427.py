@@ -34,9 +34,11 @@ def allbrand(page):
                 kr_name=select['alt'].split('(')[0]
                 eng_name=select['alt'].split('(')[1].split(')')[0]
                 img_link="https:"+select['src']
+                image_name = eng_name.replace(" ", "")
+                print(image_name)
                 try:
-                    urllib.request.urlretrieve(img_link,eng_name+".png")
-                    sheet.append([eng_name,kr_name,eng_name+'.png'])
+                    urllib.request.urlretrieve(img_link,image_name+".png")
+                    sheet.append([eng_name,kr_name,image_name+'png'])
                 except:
                     continue
                     
@@ -45,5 +47,5 @@ def allbrand(page):
 for i in range(1,356):
     allbrand(i)
     print(i)
-wb.save("musinsa_brand.xlsx")
+wb.save("musinsa_brand_공백제거.xlsx")
 

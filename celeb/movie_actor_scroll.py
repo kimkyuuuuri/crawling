@@ -43,6 +43,7 @@ while True :
         # 더보기 
         driver.find_element_by_xpath('//*[@id="content"]/div[2]/button').click()
         time.sleep(0.5)
+        
 
         html = driver.page_source
         soup = BeautifulSoup(html, 'html.parser')
@@ -77,7 +78,7 @@ while True :
                 for index, data in enumerate(detail):
                     data2=data.findAll("a")
                     actor_num=data2[0]['href'].split('=')[1]
-                    print(actor_num)
+                    #print(actor_num)
                     break
 
                 actor_detail_url= 'http://www.cine21.com/db/person/info/?person_id='
@@ -86,7 +87,8 @@ while True :
 
                 req2 = Request(actor_detail_url, headers={'User-Agent': 'Mozilla/5.0'})
                 url = urlopen(req2,context=context).read()
-                print(actor_detail_url)
+
+               # print(actor_detail_url)
 
         
                 soup = BeautifulSoup(url,'html.parser')

@@ -171,7 +171,25 @@ while period < 3 and year <3:
                                 if (celeb_category_id!=10):
                                     index_backup=index
 
-                                # 그룹 or 솔로 데이터 저장 
+                                # 그룹 or 솔로 데이터 저장
+
+                                naver_url = 'https://search.naver.com/search.naver?sm=tab_hty.top&where=nexearch&query='
+                                name_url = naver_url + urllib.parse.quote(name)
+
+                                req = Request(name_url, headers={'User-Agent': 'Mozilla/5.0'})
+                                res = urlopen(req,context=context)
+
+                                html = res.read().decode('utf-8')
+                                bs = BeautifulSoup(html, 'html.parser')
+                                #name_tags = bs.select('#main_pack > section.sc_new.cs_common_module.case_empasis._au_people_content_wrap._people_star.color_13 > div.cm_top_wrap._sticky._custom_select._header > div.title_area.type_keep._title_area > div > span:nth-child(1)')
+                                artist_detail_info = bs.findAll("div","_search_option_detail_wrap")
+                                #eng_names = [name_tag.text for name_tag in name_tags]
+                                #print(name_tags)
+                                print(artist_detail_info)
+                              
+                           
+                             
+                               # print(eng_names[0])
                                 sheet.append([index,"",celeb_category_id,name,artist_id])
                                 
                              
