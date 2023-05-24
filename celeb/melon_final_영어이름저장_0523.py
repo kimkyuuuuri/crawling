@@ -237,13 +237,13 @@ while period < 3 and year <3:
                                     if len(eng_names)>0:
                                         eng_name_group = eng_names[0]
                                                             
-                                print("\n한글이름")
-                                print(kor_name)
-                                print("\n영어이름")
-                                print(eng_name_group)
+                               # print("\n한글이름")
+                                #print(kor_name)
+                               # print("\n영어이름")
+                               # print(eng_name_group)
                                 
                                # print(kor_name)
-                                sheet.append([index,"",celeb_category_id,name,artist_id])
+                                sheet.append([index,"",celeb_category_id,name,artist_id, kor_name, eng_name_group])
                                 
                              
                     # 그룹의 멤버 저장 
@@ -291,13 +291,13 @@ while period < 3 and year <3:
                                     if len(eng_names)>0:
                                         eng_name = eng_names[0]
                                     
-                                print("한글이름")
-                                print(kor_name)
-                                print("영어이름")
-                                print(eng_name)
+                                #print("한글이름")
+                                #print(kor_name)
+                                #print("영어이름")
+                                #print(eng_name)
                                
                                # print(kor_name)
-                                sheet.append([index,index_backup,celeb_category_id,artist_name,artist_id2])
+                                sheet.append([index,index_backup,celeb_category_id,artist_name,artist_id2, kor_name, eng_name])
                                 
     
        
