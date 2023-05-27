@@ -169,59 +169,21 @@ while period < 3 and year <3:
                                 name=artist4.text.split('아티스트명')[1]
                                 index+=1
 
-                                # 그룹일 때는 index backup 해두기 (멤버의 데이터를 넣을 때 parent_id로 사용하기 위함)
+
                                 if (celeb_category_id!=10):
                                     index_backup=index
 
-                                # 그룹 or 솔로 데이터 저장
-
-                                #naver_url = 'https://open.spotify.com/search/'
-                                #name_url = naver_url + urllib.parse.quote(name)
-                                #print(name_url)
-
-                               # req = Request(name_url, headers={'User-Agent': 'Mozilla/5.0'})
-                                #res = urlopen(req,context=context)
-
-                               # html = res.read().decode('utf-8')
-                                
-                                #bs = BeautifulSoup(html, 'html.parser')
-
-                              #  driver.get(name_url)                                                                     
-                                #time.sleep(0.5)
-       
-
-        # 차트파인더 클릭
-       
-                               # test=driver.find_element_by_xpath('//*[@id="searchPage"]/div/div/section[1]/div[2]/div/div/div/div[2]/a/div').text
-                                #element = driver.find_element_by_xpath('크롤링 원하는 값 XPath 입력').text
-                                #print(test)
-                                #time.sleep(0.5)
-                                #name_tags = bs.select('#main_pack > section.sc_new.cs_common_module.case_empasis._au_people_content_wrap._people_star.color_13 > div.cm_top_wrap._sticky._custom_select._header > div.title_area.type_keep._title_area > div > span:nth-child(1)')
-
-                               # artist_detail_info = bs.find_element_by_xpath('//*[@id="searchPage"]/div/div/section[1]/div[2]/div/div/div/div[2]/a/div')
-                                #//*[@id="searchPage"]/div/div/section[1]/div[2]/div/div/div/div[2]/a/div
-                                #eng_names = [name_tag.text for name야_tag in name_tags]
-                                #print(name_tags)
-                                #print(artist_detail_info)
-                              
-                           
-                             
-                               # print(eng_names[0])
-                                print(name)
                                 
                                 kor_name=''
-                                #kor_name = re.sub(r"[^가-힣]", "", name)
-                               
-                                print(len(re.sub(r"[a-zA-Z,.']", "", name)))
-                                if  len(re.sub(r"[a-zA-Z,.']", "", name).split('(')[0]) !=1:
-                                    kor_name = re.sub(r"[a-zA-Z,.']", "", name).split('(')[0].strip()
-                                elif len(re.sub(r"[a-zA-Z,.']", "", name))==1:
+                                                             
+                                if  len(re.sub(r"[a-zA-Z]", "", artist_name).split('(')[0]) !=1:
+                                    kor_name = re.sub(r"[a-zA-Z]", "", artist_name).split('(')[0].strip()
+                                elif len(re.sub(r"[a-zA-Z]", "", artist_name))==1:
                                     kor_name=''
-                                elif len(re.sub(r"[a-zA-Z,.']", "", name)) !=0 :
-                                    kor_name = re.sub(r"[a-zA-Z,.']", "", name).split('(')[1].split(')')[0].strip()
+                                elif len(re.sub(r"[a-zA-Z]", "", artist_name)) !=0 :
+                                    kor_name = re.sub(r"[a-zA-Z]", "", artist_name).split('(')[1].split(')')[0].strip()
                                 
-                                
-                                #eng_name = re.sub(r"[^a-zA-Z\s]", "", name)
+
                                 eng_name_group  = re.sub(r"[ㄱ-ㅣ가-힣()]", "", name).strip()
                                 if len(eng_name_group)==0:
                                     naver_url = 'https://dict.naver.com/name-to-roman/translation/?query='
@@ -237,12 +199,7 @@ while period < 3 and year <3:
                                     if len(eng_names)>0:
                                         eng_name_group = eng_names[0]
                                                             
-                               # print("\n한글이름")
-                                #print(kor_name)
-                               # print("\n영어이름")
-                               # print(eng_name_group)
-                                
-                               # print(kor_name)
+                           
                                 sheet.append([index,"",celeb_category_id,name,artist_id, kor_name, eng_name_group])
                                 
                              
@@ -291,12 +248,7 @@ while period < 3 and year <3:
                                     if len(eng_names)>0:
                                         eng_name = eng_names[0]
                                     
-                                #print("한글이름")
-                                #print(kor_name)
-                                #print("영어이름")
-                                #print(eng_name)
-                               
-                               # print(kor_name)
+                             
                                 sheet.append([index,index_backup,celeb_category_id,artist_name,artist_id2, kor_name, eng_name])
                                 
     
