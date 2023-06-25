@@ -32,7 +32,7 @@ driver = wd.Chrome('/Users/kimkyuri/Documents/학교공부/4-1
 driver.maximize_window()
 
             # 드라이버가 해당 url 접속
-url = 'https://serieson.naver.com/v3/broadcasting/products/korea_off_air?sortType=POPULARITY_DESC' 
+url = 'https://serieson.naver.com/v3/broadcasting/products/comedy_enter?sortType=POPULARITY_DESC' 
 driver.get(url)                                                                     
 time.sleep(0.5)
 for i in range(10):
@@ -50,7 +50,6 @@ for i,drama in enumerate(data):
     try:
         data2 =  drama.find_all('a')[0]
         link=data2['href']
-        print(link)
         drama_number=link.split('broadcasting/')[1]
                 
         url = 'https://apis.naver.com/seriesOnWeb/serieson-web/v2/views/'+drama_number
@@ -127,19 +126,12 @@ for i,drama in enumerate(data):
             print(actor_name)
               
             if num==800:
-                 wb.save("actor_drama.xlsx")
+                 wb.save("actor_enter.xlsx")
                  break
                 
             sheet.append([num,celeb_category_id, eng_names[0],actor_name])
                         
 
-
-
-            #if num==5:
-                                       
-             #   wb.save("drama_actor.xlsx")
-              #  break
-            
        
     except Exception as e:
         print("오류 발생")
@@ -147,5 +139,5 @@ for i,drama in enumerate(data):
         continue
 
                    
-wb.save("actor_drama2.xlsx")
+wb.save("actor_enter.xlsx")
 
