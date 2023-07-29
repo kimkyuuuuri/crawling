@@ -22,8 +22,20 @@ def allbrand(page):
     kr_name=""
     img_link=""
     for i,brand in enumerate(upper_category):
+        
+            
+        
         if(i%2==0):
+            
+            #print(brand)
+            #print(brand.attrs)
+            
             link='https://www.musinsa.com'+brand['href']
+            #a=brand['data-gtm-label']
+            #kr_name=brand.text
+         
+       
+          
             req2 = Request(link, headers={'User-Agent': 'Mozilla/5.0'})
             url = urlopen(req2,context=context).read()
             _main_page2 = BeautifulSoup(url, 'html.parser')
@@ -33,22 +45,24 @@ def allbrand(page):
                 select=brand_for_img.select_one('img')
                 kr_name=select['alt'].split('(')[0]
                 eng_name=select['alt'].split('(')[1].split(')')[0]
+                
                 img_link="https:"+select['src']
-                image_name = eng_name.replace(" ", "")
-                image_link = "https://sluv-brands.s3.ap-northeast-2.amazonaws.com/brand_img/"+image_name+".png"
-                sheet.append([eng_name,kr_name,image_link])
-               # print(image_name)
                 try:
-                    urllib.request.urlretrieve(img_link,image_name)
-                    #sheet.append([eng_name,kr_name,image_link])
+                    urllib.request.urlretrieve(img_link,eng_name+".png")
+                    sheet.append([eng_name,kr_name,eng_name+'.png'])
                 except:
                     continue
                     
+                
+
+        
+                    
      
 
-for i in range(1,356):
 
+for i in range(1,356):
+#for i in range(1,5):
     allbrand(i)
     print(i)
-#wb.save("musinsa_brand_공백제거.xlsx")
+wb.save("musinsa_brand_new_add.xlsx")
 

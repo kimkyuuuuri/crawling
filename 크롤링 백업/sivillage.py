@@ -46,14 +46,12 @@ def allbrand():
                 img_link=select['src']
                 image_name = eng_name.replace(" ", "")
                 image_link = "https://sluv-brands.s3.ap-northeast-2.amazonaws.com/brand_img/"+image_name+".png"
-                #sheet.append([eng_name,kor_name,image_link])
+                sheet.append([eng_name,kor_name,image_link)
                
                 try:
                     
-                    
+                   
                     urllib.request.urlretrieve(img_link,image_name)
-                    sheet.append([eng_name,kor_name,image_link])
-                  
                     
                 except:
                     continue
